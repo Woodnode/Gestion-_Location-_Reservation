@@ -1,0 +1,44 @@
+﻿@page
+@model TP4.Pages.Chambres.IndexModel
+@{
+    ViewData["Titre"] = "Gestion des Chambres - Accueil";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">@ViewData["Titre"]</h1>
+
+    @if (Model.Chambres.Count <= 0)
+    {
+        <div class="alert alert-primary" role="alert">
+            Aucune chambre n'est enregistrée.
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Identifiant</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Prix Journalier</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var chambre in Model.Chambres)
+                {
+                    <tr>
+                        <td>@chambre.Id</td>
+                        <td>@Model.ReduireDescription(chambre)</td>
+                        <td>@chambre.PrixJournalier $</td>
+                        <td>
+                            <a asp-page="Modifier" asp-route-id="@chambre.Id" class="btn btn-primary btn-sm">Modifier</a>
+                            <a asp-page="Consulter" asp-route-id="@chambre.Id" class="btn btn-primary btn-sm">Détails</a>
+                            <a asp-page="Supprimer" asp-route-id="@chambre.Id" class="btn btn-danger btn-sm">Supprimer</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <a asp-page="Ajouter" class="btn btn-primary">Ajouter une nouvelle chambre</a>
+</div>
