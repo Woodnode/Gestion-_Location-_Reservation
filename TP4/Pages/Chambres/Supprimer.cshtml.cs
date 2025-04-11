@@ -15,9 +15,8 @@ namespace TP4.Pages.Chambres
             {
                 return NotFound();
             }
-            var chambre = GestionReservable.ObtenirReservableParId("chambre", id.Value) as Chambre;
 
-            if (chambre == null)
+            if (GestionReservable.ObtenirReservableParId("Chambre", id.Value) is not Chambre chambre)
             {
                 return NotFound();
             }

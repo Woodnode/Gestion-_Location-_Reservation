@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using TP4.Models;
 
@@ -10,15 +11,12 @@ namespace TP4.Services
         private static readonly List<Chambre> ListeChambres = [];
         public static readonly List<Reservation> ListeReservations = [];
         public static readonly List<string> ListeDeMarques = ["Kia", "Ford", "Mazda", "Toyota", "Hyundai", "Honda"];
-        public static readonly string CheminFichierVoiture = $@".\monfichierVoiture.txt";
-        public static readonly string CheminFichierChambre = $@".\monfichierChambre.txt";
-        public static readonly string CheminFichierReservation = $@".\monfichierReservation.txt";
+
 
         public static int GenererId(string type) 
         {
             int id = 0;
-            string cheminFichier = type == "Voiture" ? CheminFichierVoiture : CheminFichierChambre;
-
+            string cheminFichier = @".\monfichier" + type + ".txt";
             var lignes = File.ReadAllLines(cheminFichier);
 
             if (lignes.Length > 0)
@@ -46,25 +44,25 @@ namespace TP4.Services
 
         protected static void SauvegarderListeReservable(string type)
         {
-            if (type == "voiture")
+            string cheminFichier = @".\monfichier" + type + ".txt";
+            using StreamWriter sw = new(cheminFichier);
+
+            if (type == "Voiture")
             {
-                using StreamWriter sw = new(CheminFichierVoiture);
                 foreach (var voiture in ListeVoitures)
                 {
                     sw.WriteLine($"{voiture.Id};{voiture.Marque};{voiture.PrixJournalier};{voiture.Description};{voiture.AnneeFabrication}");
                 }
             }
-            else if (type == "chambre")
+            else if (type == "Chambre")
             {
-                using StreamWriter sw = new(CheminFichierChambre);
                 foreach (var chambre in ListeChambres)
                 {
                     sw.WriteLine($"{chambre.Id};{chambre.Description};{chambre.PrixJournalier}");
                 }
             }
-            else 
+            else
             {
-                using StreamWriter sw = new(CheminFichierReservation);
                 foreach (var reservation in ListeReservations)
                 {
                     sw.WriteLine($"{reservation.Id};{reservation.DateDebut};{reservation.DateFin};" +
@@ -74,18 +72,21 @@ namespace TP4.Services
             }
         }
 
+        // DIFFERENCIER OBTENIR LIST RESERVABLE DE CHARGER FICHIERS. S'INSPIRER DE OBTENIR RESERVABLE.
         public static List<IReservable> ObtenirListeReservable(string type)
         {
-            if (type == "voiture")
+            string cheminFichier = @".\monfichier" + type + ".txt";
+
+            if (type == "Voiture")
             {
                 ListeVoitures.Clear();
-                if (!File.Exists(CheminFichierVoiture))
+                if (!File.Exists(cheminFichier))
                 {
-                    File.Create(CheminFichierVoiture).Close();
+                    File.Create(cheminFichier).Close();
                 }
                 else
                 {
-                    var lignes = File.ReadAllLines(CheminFichierVoiture);
+                    var lignes = File.ReadAllLines(cheminFichier);
                     foreach (var ligne in lignes)
                     {
                         var champs = ligne.Split(';');
@@ -102,16 +103,16 @@ namespace TP4.Services
                 }
                 return ListeVoitures.Cast<IReservable>().ToList();
             }
-            else if (type == "chambre")
+            else if (type == "Chambre")
             {
                 ListeChambres.Clear();
-                if (!File.Exists(CheminFichierChambre))
+                if (!File.Exists(cheminFichier))
                 {
-                    File.Create(CheminFichierChambre).Close();
+                    File.Create(cheminFichier).Close();
                 }
                 else
                 {
-                    var lignes = File.ReadAllLines(CheminFichierChambre);
+                    var lignes = File.ReadAllLines(cheminFichier);
                     foreach (var ligne in lignes)
                     {
                         var champs = ligne.Split(';');
@@ -130,13 +131,13 @@ namespace TP4.Services
             {
                 ListeReservations.Clear();
 
-                if (!File.Exists(CheminFichierReservation))
+                if (!File.Exists(cheminFichier))
                 {
-                    File.Create(CheminFichierReservation).Close();
+                    File.Create(cheminFichier).Close();
                 }
                 else
                 {
-                    var lignes = File.ReadAllLines(CheminFichierReservation);
+                    var lignes = File.ReadAllLines(cheminFichier);
                     foreach (var ligne in lignes)
                     {
                         var champs = ligne.Split(';');
@@ -180,29 +181,25 @@ namespace TP4.Services
         {
             if (reservable is Voiture voiture)
             {
-                voiture.Id = GenererId("voiture");
+                voiture.Id = GenererId(voiture.GetType().Name);
                 ListeVoitures.Add(voiture);
-
-                SauvegarderListeReservable("voiture");
             }
             else if (reservable is Chambre chambre)
             {
-                chambre.Id = GenererId("chambre");
+                chambre.Id = GenererId(chambre.GetType().Name);
                 ListeChambres.Add(chambre);
-
-                SauvegarderListeReservable("chambre");
             }
             else if (reservable is Reservation reservation)
             {
                 reservation.Id = GenererIdAleatoire();
                 ListeReservations.Add(reservation);
-
-                SauvegarderListeReservable("reservation");
             }
             else
             {
                 throw new ArgumentException("Type de réservation inconnu");
             }
+
+            SauvegarderListeReservable(reservable.GetType().Name);
         }
 
         public static void SupprimerReservable(IReservable reservable)
@@ -211,63 +208,43 @@ namespace TP4.Services
             {
                 Voiture voitureASupprimer = ListeVoitures.Single(v => v.Id == voiture.Id);
                 ListeVoitures.Remove(voitureASupprimer);
-                SauvegarderListeReservable("voiture");
             }
             else if (reservable is Chambre chambre)
             {
                 Chambre chambreASupprimer = ListeChambres.Single(c => c.Id == chambre.Id);
                 ListeChambres.Remove(chambreASupprimer);
-                SauvegarderListeReservable("chambre");
             }
             else
             {
                 Reservation reservationASupprimer = ListeReservations.Single(r => r.Id == reservable.Id);
                 ListeReservations.Remove(reservationASupprimer);
-                SauvegarderListeReservable("reservation");
             }
+
+            SauvegarderListeReservable(reservable.GetType().Name);
         }
 
         public static IReservable? ObtenirReservableParId(string type, int id)
         {
-            if (type == "voiture")
+            List<IReservable> listeReservable = [];
+            switch (type) 
             {
-                return ListeVoitures.SingleOrDefault(v => v.Id == id);
+                case "Voiture":
+                    listeReservable = [.. ListeVoitures.Cast<IReservable>()];
+                    break;
+                case "Chambre":
+                    listeReservable = [.. ListeChambres.Cast<IReservable>()];
+                    break;
+                case "Reservation":
+                    listeReservable = [.. ListeReservations.Cast<IReservable>()];
+                    break;
             }
-            else if (type == "chambre")
-            {
-                return ListeChambres.SingleOrDefault(c => c.Id == id);
-            }
-            else if (type == "reservation") 
-            {
-                return ListeReservations.SingleOrDefault(r => r.Id == id);
-            }
-            else
-            {
-                throw new ArgumentException("Type de réservation inconnu");
-            }
+
+            return listeReservable.SingleOrDefault(l => l.Id == id);
         }
 
         public static void ModifierReservable(IReservable reservable)
         {
-            if (reservable is Voiture voiture)
-            {
-                Voiture voitureAModifier = ListeVoitures.Single(v => v.Id == voiture.Id);
-                voitureAModifier.Marque = voiture.Marque;
-                voitureAModifier.PrixJournalier = voiture.PrixJournalier;
-                voitureAModifier.Description = voiture.Description;
-                voitureAModifier.AnneeFabrication = voiture.AnneeFabrication;
-
-                SauvegarderListeReservable("voiture");
-            }
-            else if (reservable is Chambre chambre)
-            {
-                Chambre chambreAModifier = ListeChambres.Single(c => c.Id == chambre.Id);
-                chambreAModifier.Description = chambre.Description;
-                chambreAModifier.PrixJournalier = chambre.PrixJournalier;
-
-                SauvegarderListeReservable("chambre");
-            }
-            else if (reservable is Reservation reservation)
+            if (reservable is Reservation reservation)
             {
                 Reservation reservationAModifier = ListeReservations.Single(r => r.Id == reservation.Id);
 
@@ -276,8 +253,21 @@ namespace TP4.Services
                 reservationAModifier.ObjetDeLaReservation = reservation.ObjetDeLaReservation;
                 reservationAModifier.Prix = reservation.Prix;
 
-                SauvegarderListeReservable("reservation");
             }
+            else 
+            {
+                List<IReservable> listeReservable = reservable is Voiture ? [.. ListeVoitures.Cast<IReservable>()] : [.. ListeChambres.Cast<IReservable>()];
+                IReservable reservableAModifier = listeReservable.Single(r => r.Id == reservable.Id);
+
+                PropertyInfo[] props = reservable.GetType().GetProperties();
+
+                foreach (var prop in props)
+                {
+                    reservableAModifier.GetType().GetProperty(prop.Name)?.SetValue(reservableAModifier, prop.GetValue(reservable));
+                }
+            }
+
+            SauvegarderListeReservable(reservable.GetType().Name);
         }
     }
 }

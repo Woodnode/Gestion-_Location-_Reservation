@@ -11,7 +11,7 @@ namespace TP4.Pages.Voitures
 
         public void OnGet()
         {
-            var voitures = GestionReservable.ObtenirListeReservable("voiture").Cast<Voiture>().ToList();
+            var voitures = GestionReservable.ObtenirListeReservable("Voiture").Cast<Voiture>().ToList();
 
             Voitures = voitures.Count != 0 ? voitures : [];
         }

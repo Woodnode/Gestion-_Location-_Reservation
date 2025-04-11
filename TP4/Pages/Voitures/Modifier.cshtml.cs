@@ -20,9 +20,8 @@ namespace TP4.Pages.Voitures
             {
                 return NotFound();
             }
-            var voiture = GestionReservable.ObtenirReservableParId("voiture", id.Value) as Voiture;
 
-            if (voiture == null)
+            if (GestionReservable.ObtenirReservableParId("Voiture", id.Value) is not Voiture voiture)
             {
                 return NotFound();
             }
