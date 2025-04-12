@@ -10,7 +10,11 @@ namespace TP4.Pages.ReservationsVoitures
 
         public void OnGet()
         {
-
+            // Generer ID et Prix avec         
+            //public int CalculerPrix()
+            //{
+            //    return PrixJournalier * (DateFin - DateDebut).Days;
+            //}
         }
     }
 }

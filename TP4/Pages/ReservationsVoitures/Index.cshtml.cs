@@ -12,6 +12,7 @@ namespace TP4.Pages.ReservationsVoitures
 
         public void OnGet()
         {
+            GestionReservable.ChargerListeDepuisFichier("Voiture");
             GestionReservable.ChargerListeDepuisFichier("Reservation");
             var reservations = GestionReservable.ObtenirListeReservable("Reservation").Cast<Reservation>().ToList();
 

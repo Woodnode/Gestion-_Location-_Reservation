@@ -110,9 +110,10 @@ namespace TP4.Services
                         else if (props[i].PropertyType == typeof(DateTime)) props[i].SetValue(reservable, DateTime.Parse(champs[i]));
                         else if (props[i].Name == "ObjetDeLaReservation")
                         {
-                            props[i].SetValue(reservable, champs[i]);
-                            ++i;
-                            props[i].SetValue(reservable, int.Parse(champs[i]));
+                            IReservable? objetDeLaReservation = ObtenirReservableParId(champs[i], int.Parse(champs[i + 1]));
+                            props[i].SetValue(reservable, objetDeLaReservation);
+                            props[i + 1].SetValue(reservable, int.Parse(champs[i + 2]));
+                            i += 2;
                         }
                     }
 
