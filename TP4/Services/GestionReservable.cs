@@ -134,10 +134,7 @@ namespace TP4.Services
             };
         }
 
-        public static List<string> ObtenirListeDeMarques()
-        {
-            return ListeDeMarques;
-        }
+        public static List<string> ObtenirListeDeMarques() => ListeDeMarques;
 
         public static void AjouterReservable(IReservable reservable)
         {
@@ -163,10 +160,7 @@ namespace TP4.Services
             SauvegarderListeReservable(reservableASupprimer.GetType().Name);
         }
 
-        public static IReservable? ObtenirReservableParId(string type, int id)
-        {
-            return ObtenirListeReservable(type).SingleOrDefault(l => l.Id == id);
-        }
+        public static IReservable? ObtenirReservableParId(string type, int id) => ObtenirListeReservable(type).SingleOrDefault(l => l.Id == id);
 
         public static void ModifierReservable(IReservable reservable)
         {
