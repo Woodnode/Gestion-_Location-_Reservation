@@ -12,7 +12,6 @@ namespace TP4.Services
         public static readonly List<Reservation> ListeReservations = [];
         public static readonly List<string> ListeDeMarques = ["Kia", "Ford", "Mazda", "Toyota", "Hyundai", "Honda"];
 
-
         public static int GenererId(string type) 
         {
             if (type != "Reservation")
@@ -27,7 +26,6 @@ namespace TP4.Services
                     var champs = derniereLigne.Split(';');
                     id = int.Parse(champs[0]);
                 }
-
                 return id + 1;
             }
             else
@@ -39,15 +37,9 @@ namespace TP4.Services
                 {
                     id = random.Next(1, 10000);
                 }
-
                 return id;
             }
 
-        }
-
-        private static string ConvertirObjetEnLigne(IReservable reservable)
-        {
-            return string.Join(";", reservable.GetType().GetProperties().Select(prop => prop.GetValue(reservable)));
         }
 
         protected static void SauvegarderListeReservable(string type)
@@ -69,7 +61,8 @@ namespace TP4.Services
             {
                 foreach (var reservable in listeASauvegarder)
                 {
-                    sw.WriteLine(ConvertirObjetEnLigne(reservable));
+                    string ligne = string.Join(";", reservable.GetType().GetProperties().Select(prop => prop.GetValue(reservable)));
+                    sw.WriteLine(ligne);
                 }
             }
         }
@@ -107,7 +100,7 @@ namespace TP4.Services
                 foreach (var ligne in lignes)
                 {
                     var champs = ligne.Split(';');
-                    var reservable = Activator.CreateInstance(reservableType);
+                    var reservable = Activator.CreateInstance(reservableType) ?? throw new InvalidOperationException("Erreur lors de la création de l'objet reservable");
                     PropertyInfo[] props = reservable.GetType().GetProperties();
 
                     for (int i = 0; i < props.Length; i++)
