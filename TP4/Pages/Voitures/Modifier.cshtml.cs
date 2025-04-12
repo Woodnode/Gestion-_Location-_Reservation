@@ -14,7 +14,7 @@ namespace TP4.Pages.Voitures
 
         public ActionResult OnGet(int? id)
         {
-            ListeDeMarques = GestionReservable.ListeDeMarques;
+            ListeDeMarques = GestionReservable.ObtenirListeDeMarques();
 
             if (id == null)
             {
@@ -32,7 +32,7 @@ namespace TP4.Pages.Voitures
 
         public IActionResult OnPost()
         {
-            ListeDeMarques = GestionReservable.ListeDeMarques;
+            ListeDeMarques = GestionReservable.ObtenirListeDeMarques();
             int anneeMax = DateTime.Now.Year;
             int anneeMin = anneeMax - 10;
 

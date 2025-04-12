@@ -10,7 +10,7 @@ namespace TP4.Services
         private static readonly List<Voiture> ListeVoitures = [];
         private static readonly List<Chambre> ListeChambres = [];
         public static readonly List<Reservation> ListeReservations = [];
-        public static readonly List<string> ListeDeMarques = ["Kia", "Ford", "Mazda", "Toyota", "Hyundai", "Honda"];
+        private static readonly List<string> ListeDeMarques = ["Kia", "Ford", "Mazda", "Toyota", "Hyundai", "Honda"];
 
         public static int GenererId(string type) 
         {
@@ -132,6 +132,11 @@ namespace TP4.Services
                 "Reservation" => [.. ListeReservations.Cast<IReservable>()],
                 _ => throw new ArgumentException("Type de liste inconnu"),
             };
+        }
+
+        public static List<string> ObtenirListeDeMarques()
+        {
+            return ListeDeMarques;
         }
 
         public static void AjouterReservable(IReservable reservable)

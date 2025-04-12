@@ -15,13 +15,13 @@ namespace TP4.Pages.Voitures
 
         public ActionResult OnGet()
         {
-            ListeDeMarques = GestionReservable.ListeDeMarques;
+            ListeDeMarques = GestionReservable.ObtenirListeDeMarques();
             return Page();
         }
 
         public IActionResult OnPost()
         {
-            ListeDeMarques = GestionReservable.ListeDeMarques;
+            ListeDeMarques = GestionReservable.ObtenirListeDeMarques();
             int anneeMax = DateTime.Now.Year;
             int anneeMin = anneeMax - 10;
 
