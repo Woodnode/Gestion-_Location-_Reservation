@@ -1,0 +1,48 @@
+﻿@page
+@model TP4.Pages.ReservationsVoitures.IndexModel
+@{
+    ViewData["Titre"] = "Gestion des Réservations - Accueil";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">@ViewData["Titre"]</h1>
+
+    @if (Model.Reservations.Count <= 0)
+    {
+        <div class="alert alert-primary" role="alert">
+            Aucune réservation n'est enregistrée.
+        </div>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Identifiant</th>
+                    <th scope="col">Identifiant Voiture</th>
+                    <th scope="col">Date de Début</th>
+                    <th scope="col">Date de Fin</th>
+                    <th scope="col">Prix Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reservation in Model.Reservations)
+                {
+                    <tr>
+                        <td>@reservation.Id</td>
+                        <td>@reservation.ObjetDeLaReservation</td>
+                        <td>@reservation.DateDebut</td>
+                        <td>@reservation.DateFin</td>
+                        <td>@reservation.Prix $</td>
+                        <td>
+                            <a asp-page="Modifier" asp-route-id="@reservation.Id" class="btn btn-primary btn-sm">Modifier</a>
+                            <a asp-page="Consulter" asp-route-id="@reservation.Id" class="btn btn-primary btn-sm">Détails</a>
+                            <a asp-page="Supprimer" asp-route-id="@reservation.Id" class="btn btn-danger btn-sm">Supprimer</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <a asp-page="Ajouter" class="btn btn-primary">Nouvelle réservation</a>
+</div>
