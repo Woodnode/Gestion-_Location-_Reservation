@@ -11,6 +11,7 @@ namespace TP4.Pages.Chambres
 
         public void OnGet()
         {
+            GestionReservable.ChargerListeDepuisFichier("Chambre");
             var chambres = GestionReservable.ObtenirListeReservable("Chambre").Cast<Chambre>().ToList();
             
             Chambres = chambres.Count != 0 ? chambres : [];
