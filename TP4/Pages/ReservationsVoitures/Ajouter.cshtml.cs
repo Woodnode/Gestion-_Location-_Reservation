@@ -7,14 +7,76 @@ namespace TP4.Pages.ReservationsVoitures
 {
     public class AjouterModel : PageModel
     {
+        [BindProperty]
+        public required Reservation Reservation { get; set; }
+        
+        public int ReservationId { get; set; }
 
-        public void OnGet()
+        public required List<Reservation> ListeDeReservations { get; set; }
+
+        public required List<Voiture> ListeDeVoitures { get; set; }
+
+        [BindProperty]
+        public int IdVoiture { get; set; }
+
+        public ActionResult OnGet()
         {
-            // Generer ID et Prix avec         
-            //public int CalculerPrix()
-            //{
-            //    return PrixJournalier * (DateFin - DateDebut).Days;
-            //}
+            ChargementDePage();
+            return Page();
+        }
+
+        public IActionResult OnPost()
+        {
+            ChargementDePage();
+            Voiture voiture = ListeDeVoitures.First(v => v.Id == IdVoiture);
+
+            if (voiture == null)
+            {
+                ModelState.AddModelError("IdVoiture", "Veuillez sélectionner une voiture.");
+            }
+            else
+            {
+                Reservation.ObjetDeLaReservation = voiture;
+                Reservation.PrixJournalier = voiture.PrixJournalier;
+                Reservation.Prix = Reservation.PrixJournalier * ((Reservation.DateFin - Reservation.DateDebut).Days + 1);
+            }
+
+            if (Reservation.DateDebut < DateTime.Now.Date)
+            {
+                ModelState.AddModelError("Reservation.DateDebut", "La date de début doit être supérieure ou égale à la date actuelle.");
+            }
+            if (Reservation.DateFin < Reservation.DateDebut)
+            {
+                ModelState.AddModelError("Reservation.DateFin", "La date de fin doit être supérieure ou égale à la date de début.");
+            }
+            if (ListeDeReservations.Any(r => r.ObjetDeLaReservation.Id == Reservation.ObjetDeLaReservation.Id))
+            {
+                ModelState.AddModelError("Reservation.ObjetDeLaReservation", "Cette voiture est déjà réservée.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+            GestionReservable.AjouterReservable(Reservation);
+            return RedirectToPage("Index");
+        }
+
+        private void ChargementDePage()
+        {
+            ReservationId = GestionReservable.GenererId("Reservation");
+            ListeDeReservations = [.. GestionReservable.ObtenirListeReservable("Reservation").Cast<Reservation>()];
+            ListeDeVoitures = [];
+            List<Voiture> ListeAVerifier = [.. GestionReservable.ObtenirListeReservable("Voiture").Cast<Voiture>()];
+            int anneeMax = DateTime.Now.Year;
+            int anneeMin = anneeMax - 10;
+            foreach (var voiture in ListeAVerifier)
+            {
+                if (voiture.AnneeFabrication > anneeMin)
+                {
+                    ListeDeVoitures.Add(voiture);
+                }
+            }
         }
     }
 }

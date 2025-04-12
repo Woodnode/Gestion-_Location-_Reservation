@@ -139,11 +139,12 @@ namespace TP4.Services
 
         public static void AjouterReservable(IReservable reservable)
         {
-            reservable.Id = GenererId(reservable.GetType().Name);
-
             if (reservable is Voiture voiture) ListeVoitures.Add(voiture);
             else if (reservable is Chambre chambre) ListeChambres.Add(chambre);
-            else if (reservable is Reservation reservation) ListeReservations.Add(reservation);
+            else if (reservable is Reservation reservation)
+            {
+                ListeReservations.Add(reservation);
+            }
             else throw new ArgumentException("Type de réservation inconnu");
 
             SauvegarderListeReservable(reservable.GetType().Name);

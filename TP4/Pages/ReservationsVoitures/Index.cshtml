@@ -31,8 +31,8 @@
                     <tr>
                         <td>@reservation.Id</td>
                         <td>@reservation.ObjetDeLaReservation.Id</td>
-                        <td>@reservation.DateDebut</td>
-                        <td>@reservation.DateFin</td>
+                        <td>@reservation.DateDebut.ToString("yyyy-MM-dd")</td>
+                        <td>@reservation.DateFin.ToString("yyyy-MM-dd")</td>
                         <td>@reservation.Prix $</td>
                         <td>
                             <a asp-page="Modifier" asp-route-id="@reservation.Id" class="btn btn-primary btn-sm">Modifier</a>

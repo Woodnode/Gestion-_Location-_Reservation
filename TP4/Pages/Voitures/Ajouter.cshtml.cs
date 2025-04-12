@@ -34,6 +34,7 @@ namespace TP4.Pages.Voitures
                 return Page();
             }
 
+            Voiture.Id = GestionReservable.GenererId("Voiture");
             GestionReservable.AjouterReservable(Voiture);
 
             return RedirectToPage("Index");

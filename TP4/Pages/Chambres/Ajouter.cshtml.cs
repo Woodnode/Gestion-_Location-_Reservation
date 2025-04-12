@@ -17,6 +17,7 @@ namespace TP4.Pages.Chambres
                 return Page();
             }
 
+            Chambre.Id = GestionReservable.GenererId("Chambre");
             GestionReservable.AjouterReservable(Chambre);
 
             return RedirectToPage("Index");
