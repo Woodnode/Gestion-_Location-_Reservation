@@ -39,16 +39,28 @@ namespace TP4.Pages.ReservationsVoitures
 
         public IActionResult OnPost()
         {
+            ChargementDePage();
+            Voiture voiture = ListeDeVoitures.First(v => v.Id == IdVoiture);
+
+            if (voiture == null)
+            {
+                ModelState.AddModelError("IdVoiture", "Veuillez sélectionner une voiture.");
+            }
+
+            else
+            {
+                Reservation.ObjetDeLaReservation = voiture;
+                Reservation.PrixJournalier = voiture.PrixJournalier;
+                Reservation.Prix = Reservation.PrixJournalier * ((Reservation.DateFin - Reservation.DateDebut).Days + 1);
+            }
             if (!ModelState.IsValid)
             {
-                ChargementDePage();
                 return Page();
             }
 
             if (Reservation.DateFin < DateTime.Now.Date)
             {
                 ModelState.AddModelError(string.Empty, "Vous ne pouvez pas modifier une réservation passée ou en cours.");
-                ChargementDePage();
                 return Page();
             }
 
@@ -58,11 +70,7 @@ namespace TP4.Pages.ReservationsVoitures
 
         private void ChargementDePage()
         {
-            ListeDeVoitures = GestionReservable.ObtenirListeReservable("Voiture")
-                .Cast<Voiture>()
-                .ToList();
-
-            IdVoiture = Reservation.ObjetDeLaReservation.Id;
+            ListeDeVoitures = [.. GestionReservable.ObtenirListeReservable("Voiture").Cast<Voiture>()];
         }
     }
 }

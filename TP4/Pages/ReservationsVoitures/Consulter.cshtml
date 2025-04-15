@@ -41,14 +41,14 @@
                 <dd class="col-sm-10">@Model.Reservation.DateFin.ToString("yyyy-MM-dd")</dd>
 
                 <dt class="col-sm-2">Prix de la Réservation</dt>
-                <dd class="col-sm-10">@Model.Reservation.Prix</dd>
+                <dd class="col-sm-10">@Model.Reservation.Prix ?</dd>
             </dl>
         </div>
     </div>
 
     <div class="mt-3">
-        <a asp-page="./Modifier" asp-route-id="@Model.Voiture.Id" class="btn btn-primary">Modifier</a>
-        <a asp-page="./Supprimer" asp-route-id="@Model.Voiture.Id" class="btn btn-danger">Supprimer</a>
+        <a asp-page="./Modifier" asp-route-id="@Model.Reservation.Id" class="btn btn-primary">Modifier</a>
+        <a asp-page="./Supprimer" asp-route-id="@Model.Reservation.Id" class="btn btn-danger">Supprimer</a>
         <a asp-page="./Index" class="btn btn-secondary">Retourner à la liste</a>
     </div>
 </div>
