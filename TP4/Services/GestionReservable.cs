@@ -177,24 +177,24 @@ namespace TP4.Services
             SauvegarderListeReservable(reservable.GetType().Name);
         }
 
-        public static void TrierListeReservation(string tri)
+        public static List<Reservation> TrierListeReservation(string tri)
         {
+            List<Reservation> listeReservations = ObtenirListeReservable("Reservation").Cast<Reservation>().ToList();
+
             if (tri == "DateDebut")
             {
-                ListeReservations.Sort((x, y) => y.DateDebut.CompareTo(x.DateDebut));
+                listeReservations.Sort((x, y) => y.DateDebut.CompareTo(x.DateDebut));
             }
             else if (tri == "DateFin")
             {
-                ListeReservations.Sort((x, y) => y.DateFin.CompareTo(x.DateFin));
+                listeReservations.Sort((x, y) => y.DateFin.CompareTo(x.DateFin));
             }
-            else if (tri == "Montant total")
+            else if (tri == "Prix")
             {
-                ListeReservations.Sort((x, y) => y.Prix.CompareTo(x.Prix));
+                listeReservations.Sort((x, y) => y.Prix.CompareTo(x.Prix));
             }
-            else
-            {
-                throw new ArgumentException("Type de tri inconnu");
-            }
+
+            return listeReservations;
         }
 
     }

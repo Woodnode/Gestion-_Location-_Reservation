@@ -7,6 +7,18 @@
 <div class="container mt-5">
     <h1 class="mb-4">@ViewData["Titre"]</h1>
 
+<form method="get">
+        <div class="form-group mb-3">
+            <label for="tri" class="control-label font-weight-bold">Critère de trie</label>
+            <select id="tri" name="tri">
+    <option value="DateDebut">Date de Début de Réservation</option>
+                <option value="DateFin">Date de Fin de Réservation</option>
+                <option value="Prix">Prix de la Réservation</option>
+</select>
+        </div>
+        <button type="submit" class="btn btn-primary">Trier</button>
+</form>
+
     @if (Model.Reservations.Count <= 0)
     {
         <div class="alert alert-primary" role="alert">
