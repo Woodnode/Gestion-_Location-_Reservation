@@ -176,5 +176,26 @@ namespace TP4.Services
 
             SauvegarderListeReservable(reservable.GetType().Name);
         }
+
+        public static void TrierListeReservation(string tri)
+        {
+            if (tri == "DateDebut")
+            {
+                ListeReservations.Sort((x, y) => y.DateDebut.CompareTo(x.DateDebut));
+            }
+            else if (tri == "DateFin")
+            {
+                ListeReservations.Sort((x, y) => y.DateFin.CompareTo(x.DateFin));
+            }
+            else if (tri == "Montant total")
+            {
+                ListeReservations.Sort((x, y) => y.Prix.CompareTo(x.Prix));
+            }
+            else
+            {
+                throw new ArgumentException("Type de tri inconnu");
+            }
+        }
+
     }
 }

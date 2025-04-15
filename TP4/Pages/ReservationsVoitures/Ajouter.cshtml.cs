@@ -49,9 +49,11 @@ namespace TP4.Pages.ReservationsVoitures
             {
                 ModelState.AddModelError("Reservation.DateFin", "La date de fin doit être supérieure ou égale à la date de début.");
             }
-            if (ListeDeReservations.Any(r => r.ObjetDeLaReservation.Id == Reservation.ObjetDeLaReservation.Id))
+
+            if (ListeDeReservations.Where(r => r.ObjetDeLaReservation.Id == Reservation.ObjetDeLaReservation.Id)
+                .Any(r => r.DateFin >= Reservation.DateDebut && r.DateDebut <= Reservation.DateFin))
             {
-                ModelState.AddModelError("Reservation.ObjetDeLaReservation", "Cette voiture est déjà réservée.");
+                ModelState.AddModelError("Reservation.ObjetDeLaReservation", "Cette voiture est déjà réservée pour ces dates.");
             }
 
             if (!ModelState.IsValid)

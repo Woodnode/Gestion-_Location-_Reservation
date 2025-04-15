@@ -39,7 +39,7 @@
                 <option value="">-- Sélectionnez une voiture --</option>
                 @foreach (var voiture in Model.ListeDeVoitures)
                 {
-                    <option value="@voiture.Id">@voiture.Marque | @voiture.Description | @voiture.PrixJournalier</option>
+                    <option value="@voiture.Id">Marque: @voiture.Marque | Description: @voiture.Description | @voiture.PrixJournalier$ par jour.</option>
                 }
             </select>
         </div>

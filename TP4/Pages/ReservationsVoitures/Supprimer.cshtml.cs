@@ -20,13 +20,6 @@ namespace TP4.Pages.ReservationsVoitures
 
         public IActionResult OnPost()
         {
-            if (Reservation.DateFin < DateTime.Now.Date)
-            {
-                ModelState.AddModelError("", "Vous ne pouvez pas supprimer une réservation passée ou en cours.");
-                ChargementDePage(Reservation.Id);
-                return Page();
-            }
-
             GestionReservable.SupprimerReservable(Reservation);
             return RedirectToPage("Index");
         }
