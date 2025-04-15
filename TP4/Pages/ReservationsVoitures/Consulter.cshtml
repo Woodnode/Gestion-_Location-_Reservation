@@ -47,8 +47,16 @@
     </div>
 
     <div class="mt-3">
-        <a asp-page="./Modifier" asp-route-id="@Model.Reservation.Id" class="btn btn-primary">Modifier</a>
-        <a asp-page="./Supprimer" asp-route-id="@Model.Reservation.Id" class="btn btn-danger">Supprimer</a>
-        <a asp-page="./Index" class="btn btn-secondary">Retourner à la liste</a>
+        @if (@Model.Reservation.DateDebut >= DateTime.Now)
+        {
+            <a asp-page="Modifier" asp-route-id="@@Model.Reservation.Id" class="btn btn-primary">Modifier</a>
+            <a asp-page="Supprimer" asp-route-id="@@Model.Reservation.Id" class="btn btn-danger">Supprimer</a>
+        }
+        else
+        {
+            <a class="btn btn-secondary btn-sm" disabled>Modifier</a>
+            <a class="btn btn-secondary btn-sm" disabled>Supprimer</a>
+        }
+        <a asp-page="./Index" class="btn btn-primary">Retourner à la liste</a>
     </div>
 </div>
