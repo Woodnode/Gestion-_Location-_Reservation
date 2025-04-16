@@ -1,2 +1,3 @@
 1;Chambre double;415
 2;Suite familiale;112
+3;Chambre simple;65
