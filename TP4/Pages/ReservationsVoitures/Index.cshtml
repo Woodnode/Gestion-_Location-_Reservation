@@ -8,15 +8,16 @@
     <h1 class="mb-4">@ViewData["Titre"]</h1>
 
 <form method="get">
-        <div class="form-group mb-3">
+        <div class="form-group mt-5 mb-2">
             <label for="tri" class="control-label font-weight-bold">Critère de trie</label>
-            <select id="tri" name="tri">
-    <option value="DateDebut">Date de Début de Réservation</option>
-                <option value="DateFin">Date de Fin de Réservation</option>
-                <option value="Prix">Prix de la Réservation</option>
-</select>
+            <select class="mx-2" id="tri" name="tri">
+                <option value="DateDebut">Date de Début</option>
+                <option value="DateFin">Date de Fin</option>
+                <option value="Prix">Prix Total</option>
+            </select>
+            <button type="submit" class="btn btn-outline-dark btn-sm">Trier</button>
         </div>
-        <button type="submit" class="btn btn-primary">Trier</button>
+        
 </form>
 
     @if (Model.Reservations.Count <= 0)
@@ -27,7 +28,7 @@
     }
     else
     {
-        <table class="table">
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th scope="col">Identifiant</th>
@@ -35,6 +36,7 @@
                     <th scope="col">Date de Début</th>
                     <th scope="col">Date de Fin</th>
                     <th scope="col">Prix Total</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>

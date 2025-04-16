@@ -10,38 +10,38 @@
         <div class="card">
             <div class="card-body">
                 <dl class="row mb-3">
-                    <dt class="col-sm-2">Identifiant de la Réservation</dt>
-                    <dd class="col-sm-10">@Model.Reservation.Id</dd>
+                    <dt class="col-sm-4">Identifiant de la Réservation</dt>
+                    <dd class="col-sm-8">@Model.Reservation.Id</dd>
 
-                    <div class="card">
+                    <div class="card my-3 bg-light">
                         <div class="card-body">
                             <dl class="row mb-3">
-                                <dt class="col-sm-2">Identifiant Voiture</dt>
-                                <dd class="col-sm-10">@Model.Voiture.Id</dd>
+                                <dt class="col-sm-4">Identifiant Voiture</dt>
+                                <dd class="col-sm-8">@Model.Voiture.Id</dd>
 
-                                <dt class="col-sm-2">Marque Voiture</dt>
-                                <dd class="col-sm-10">@Model.Voiture.Marque</dd>
+                                <dt class="col-sm-4">Marque Voiture</dt>
+                                <dd class="col-sm-8">@Model.Voiture.Marque</dd>
 
-                                <dt class="col-sm-2">Prix Journalier de location de la Voiture</dt>
-                                <dd class="col-sm-10">@Model.Voiture.PrixJournalier $</dd>
+                                <dt class="col-sm-4">Prix Journalier de location de la Voiture</dt>
+                                <dd class="col-sm-8">@Model.Voiture.PrixJournalier $</dd>
 
-                                <dt class="col-sm-2">Description de la Voiture</dt>
-                                <dd class="col-sm-10">@Model.Voiture.Description</dd>
+                                <dt class="col-sm-4">Description de la Voiture</dt>
+                                <dd class="col-sm-8">@Model.Voiture.Description</dd>
 
-                                <dt class="col-sm-2">Année de Fabrication de la Voiture</dt>
-                                <dd class="col-sm-10">@Model.Voiture.AnneeFabrication</dd>
+                                <dt class="col-sm-4">Année de Fabrication de la Voiture</dt>
+                                <dd class="col-sm-8">@Model.Voiture.AnneeFabrication</dd>
                             </dl>
                         </div>
                     </div>
 
-                    <dt class="col-sm-2">Date de Début de Réservation</dt>
-                    <dd class="col-sm-10">@Model.Reservation.DateDebut.ToString("yyyy-MM-dd")</dd>
+                    <dt class="col-sm-4">Date de Début de Réservation</dt>
+                    <dd class="col-sm-8">@Model.Reservation.DateDebut.ToString("yyyy-MM-dd")</dd>
 
-                    <dt class="col-sm-2">Date de Fin de Réservation</dt>
-                    <dd class="col-sm-10">@Model.Reservation.DateFin.ToString("yyyy-MM-dd")</dd>
+                    <dt class="col-sm-4">Date de Fin de Réservation</dt>
+                    <dd class="col-sm-8">@Model.Reservation.DateFin.ToString("yyyy-MM-dd")</dd>
 
-                    <dt class="col-sm-2">Prix de la Réservation</dt>
-                    <dd class="col-sm-10">@Model.Reservation.Prix $</dd>
+                    <dt class="col-sm-4">Prix de la Réservation</dt>
+                    <dd class="col-sm-8">@Model.Reservation.Prix $</dd>
                 </dl>
             </div>
         </div>
@@ -50,7 +50,7 @@
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <button type="submit" class="btn btn-danger">Supprimer</button>
-            <a asp-page="./Index" class="btn btn-secondary">Retourner à la liste</a>
+            <a asp-page="./Index" class="btn btn-primary">Retourner à la liste</a>
         </form>
     </div>
 </div>

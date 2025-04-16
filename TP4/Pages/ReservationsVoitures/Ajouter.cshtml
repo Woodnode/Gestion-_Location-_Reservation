@@ -35,7 +35,7 @@
 
         <div class="form-group mb-3">
             <label asp-for="IdVoiture" class="control-label font-weight-bold">Voiture</label>
-            <select asp-for="IdVoiture" class="form-control">
+            <select asp-for="IdVoiture" class="form-control select-arrow">
                 <option value="">-- Sélectionnez une voiture --</option>
                 @foreach (var voiture in Model.ListeDeVoitures)
                 {
