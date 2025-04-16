@@ -17,8 +17,9 @@ namespace TP4.Pages.ReservationsVoitures
                 Reservations = GestionReservable.TrierListeReservation(tri);
                 return Page();
             }
-            GestionReservable.ChargerListeDepuisFichier("Voiture");
-            GestionReservable.ChargerListeDepuisFichier("Reservation");
+
+            GestionReservable.ChargerListeDepuisFichier();
+
             var reservations = GestionReservable.ObtenirListeReservable("Reservation").Cast<Reservation>().ToList();
 
             Reservations = reservations.Count != 0 ? reservations : [];

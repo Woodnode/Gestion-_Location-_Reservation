@@ -12,17 +12,10 @@ namespace TP4.Pages.Voitures
 
         public ActionResult OnGet(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            if (GestionReservable.ObtenirReservableParId("Voiture", id.Value) is not Voiture voiture)
-            {
-                return NotFound();
-            }
+            Voiture = (Voiture)GestionReservable.ObtenirReservableParId("Voiture", id.Value);
 
-            Voiture = voiture;
             return Page();
         }
     }

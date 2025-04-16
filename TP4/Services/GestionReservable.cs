@@ -67,59 +67,52 @@ namespace TP4.Services
             }
         }
 
-        public static void ChargerListeDepuisFichier(string type)
+        public static void ChargerListeDepuisFichier()
         {
-            string cheminFichier = @".\monfichier" + type + ".txt";
-
-            if (!File.Exists(cheminFichier))
+            Dictionary<string, Type> listeTypes = new()
             {
-                File.Create(cheminFichier).Close();
-                return;
-            }
-            else
-            {
-                var lignes = File.ReadAllLines(cheminFichier);
-                Type reservableType;
+                { "Voiture", typeof(Voiture) },
+                { "Chambre", typeof(Chambre) },
+                { "Reservation", typeof(Reservation) }
+            };
 
-                if (type == "Voiture")
-                {
-                    ListeVoitures.Clear();
-                    reservableType = typeof(Voiture);
-                }
-                else if (type == "Chambre")
-                {
-                    ListeChambres.Clear();
-                    reservableType = typeof(Chambre);
-                }
+            ListeChambres.Clear();
+            ListeVoitures.Clear();
+            ListeReservations.Clear();
+
+            foreach (var type in listeTypes)
+            {
+                string cheminFichier = @".\monfichier" + type.Key + ".txt";
+
+                if (!File.Exists(cheminFichier)) File.Create(cheminFichier).Close();
                 else
                 {
-                    ListeReservations.Clear();
-                    reservableType = typeof(Reservation);
-                }
+                    var lignes = File.ReadAllLines(cheminFichier);
 
-                foreach (var ligne in lignes)
-                {
-                    var champs = ligne.Split(';');
-                    var reservable = Activator.CreateInstance(reservableType) ?? throw new InvalidOperationException("Erreur lors de la création de l'objet reservable");
-                    PropertyInfo[] props = reservable.GetType().GetProperties();
-
-                    for (int i = 0; i < props.Length; i++)
+                    foreach (var ligne in lignes)
                     {
-                        if (props[i].PropertyType == typeof(int)) props[i].SetValue(reservable, int.Parse(champs[i]));
-                        else if (props[i].PropertyType == typeof(string)) props[i].SetValue(reservable, champs[i]);
-                        else if (props[i].PropertyType == typeof(DateTime)) props[i].SetValue(reservable, DateTime.Parse(champs[i]));
-                        else if (props[i].Name == "ObjetDeLaReservation")
-                        {
-                            IReservable? objetDeLaReservation = ObtenirReservableParId(champs[i], int.Parse(champs[i + 1]));
-                            props[i].SetValue(reservable, objetDeLaReservation);
-                            props[i + 1].SetValue(reservable, int.Parse(champs[i + 2]));
-                            i += 2;
-                        }
-                    }
+                        var champs = ligne.Split(';');
+                        var reservable = Activator.CreateInstance(type.Value) ?? throw new InvalidOperationException("Erreur lors de la création de l'objet reservable");
+                        PropertyInfo[] props = reservable.GetType().GetProperties();
 
-                    if (type == "Voiture") ListeVoitures.Add((Voiture)reservable);
-                    else if (type == "Chambre") ListeChambres.Add((Chambre)reservable);
-                    else if (type == "Reservation") ListeReservations.Add((Reservation)reservable);
+                        for (int i = 0; i < props.Length; i++)
+                        {
+                            if (props[i].PropertyType == typeof(int)) props[i].SetValue(reservable, int.Parse(champs[i]));
+                            else if (props[i].PropertyType == typeof(string)) props[i].SetValue(reservable, champs[i]);
+                            else if (props[i].PropertyType == typeof(DateTime)) props[i].SetValue(reservable, DateTime.Parse(champs[i]));
+                            else if (props[i].Name == "ObjetDeLaReservation")
+                            {
+                                IReservable? objetDeLaReservation = ObtenirReservableParId(champs[i], int.Parse(champs[i + 1]));
+                                props[i].SetValue(reservable, objetDeLaReservation);
+                                props[i + 1].SetValue(reservable, int.Parse(champs[i + 2]));
+                                i += 2;
+                            }
+                        }
+
+                        if (type.Key == "Voiture") ListeVoitures.Add((Voiture)reservable);
+                        else if (type.Key == "Chambre") ListeChambres.Add((Chambre)reservable);
+                        else if (type.Key == "Reservation") ListeReservations.Add((Reservation)reservable);
+                    }
                 }
             }
         }
@@ -141,10 +134,7 @@ namespace TP4.Services
         {
             if (reservable is Voiture voiture) ListeVoitures.Add(voiture);
             else if (reservable is Chambre chambre) ListeChambres.Add(chambre);
-            else if (reservable is Reservation reservation)
-            {
-                ListeReservations.Add(reservation);
-            }
+            else if (reservable is Reservation reservation) ListeReservations.Add(reservation);
             else throw new ArgumentException("Type de réservation inconnu");
 
             SauvegarderListeReservable(reservable.GetType().Name);
@@ -179,23 +169,19 @@ namespace TP4.Services
 
         public static List<Reservation> TrierListeReservation(string tri)
         {
-            List<Reservation> listeReservations = ObtenirListeReservable("Reservation").Cast<Reservation>().ToList();
+            if (tri == "DateDebut") ListeReservations.Sort((x, y) => y.DateDebut.CompareTo(x.DateDebut));
+            else if (tri == "DateFin") ListeReservations.Sort((x, y) => y.DateFin.CompareTo(x.DateFin));
+            else if (tri == "Prix") ListeReservations.Sort((x, y) => y.Prix.CompareTo(x.Prix));
 
-            if (tri == "DateDebut")
-            {
-                listeReservations.Sort((x, y) => y.DateDebut.CompareTo(x.DateDebut));
-            }
-            else if (tri == "DateFin")
-            {
-                listeReservations.Sort((x, y) => y.DateFin.CompareTo(x.DateFin));
-            }
-            else if (tri == "Prix")
-            {
-                listeReservations.Sort((x, y) => y.Prix.CompareTo(x.Prix));
-            }
-
-            return listeReservations;
+            return ListeReservations;
         }
 
+        public static bool EstReserve(int id)
+        {
+            if (ObtenirListeReservable("Reservation").Cast<Reservation>().ToList()
+              .Any(r => r.ObjetDeLaReservation.Id == id)) return true;
+
+            return false;
+        }
     }
 }

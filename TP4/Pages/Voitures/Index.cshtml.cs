@@ -9,17 +9,19 @@ namespace TP4.Pages.Voitures
     {
         public required List<Voiture> Voitures { get; set; }
 
-        public void OnGet()
+        public ActionResult OnGet()
         {
-            GestionReservable.ChargerListeDepuisFichier("Voiture");
+            GestionReservable.ChargerListeDepuisFichier();
+
             var voitures = GestionReservable.ObtenirListeReservable("Voiture").Cast<Voiture>().ToList();
-
             Voitures = voitures.Count != 0 ? voitures : [];
+
+            return Page();
         }
 
-        public string ReduireDescription(Voiture voiture)
-        {
-            return voiture.Description.Length > 50 ? string.Concat(voiture.Description.AsSpan(0, 50), "...") : voiture.Description;
-        }
+        public string ReduireDescription(Voiture voiture) => voiture.Description.Length > 50 ? 
+            string.Concat(voiture.Description.AsSpan(0, 50), "...") : voiture.Description;
+
+        public bool VerifierReservation(Voiture voiture) => GestionReservable.EstReserve(voiture.Id);
     }
 }

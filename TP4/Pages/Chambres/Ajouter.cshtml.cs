@@ -12,10 +12,7 @@ namespace TP4.Pages.Chambres
 
         public ActionResult OnPost()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            if (!ModelState.IsValid) return Page();
 
             Chambre.Id = GestionReservable.GenererId("Chambre");
             GestionReservable.AjouterReservable(Chambre);

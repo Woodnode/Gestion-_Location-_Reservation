@@ -16,23 +16,17 @@ namespace TP4.Pages.Voitures
         {
             ListeDeMarques = GestionReservable.ObtenirListeDeMarques();
 
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            if (GestionReservable.ObtenirReservableParId("Voiture", id.Value) is not Voiture voiture)
-            {
-                return NotFound();
-            }
+            Voiture = (Voiture)GestionReservable.ObtenirReservableParId("Voiture", id.Value);
 
-            Voiture = voiture;
             return Page();
         }
 
         public IActionResult OnPost()
         {
             ListeDeMarques = GestionReservable.ObtenirListeDeMarques();
+
             int anneeMax = DateTime.Now.Year;
             int anneeMin = anneeMax - 10;
 
@@ -41,10 +35,7 @@ namespace TP4.Pages.Voitures
                 ModelState.AddModelError("Voiture.AnneeFabrication", $"L'année de fabrication doit être comprise entre {anneeMin} et {anneeMax}");
             }
 
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            if (!ModelState.IsValid) return Page();
 
             GestionReservable.ModifierReservable(Voiture);
 

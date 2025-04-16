@@ -12,17 +12,12 @@ namespace TP4.Pages.Chambres
 
         public ActionResult OnGet(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            if (GestionReservable.ObtenirReservableParId("Chambre", id.Value) is not Chambre chambre)
-            {
-                return NotFound();
-            }
+            if (GestionReservable.ObtenirReservableParId("Chambre", id.Value) is not Chambre chambre) return NotFound();
 
             Chambre = chambre;
+
             return Page();
         }
     }

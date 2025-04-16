@@ -39,7 +39,6 @@ namespace TP4.Pages.ReservationsVoitures
             ChargementDePage();
             ListeDeReservations = [.. GestionReservable.ObtenirListeReservable("Reservation").Cast<Reservation>()];
 
-            // Verification de l'objet voiture et attribution à la reservation si il n'y a pas d'erreur.
             Voiture voiture = ListeDeVoitures.First(v => v.Id == IdVoiture);
             if (voiture == null)
             {
@@ -54,15 +53,13 @@ namespace TP4.Pages.ReservationsVoitures
 
             if (Reservation.DateDebut < DateTime.Now.Date)
             {
-                ModelState.AddModelError("Reservation.DateDebut", "La date de début doit être supérieure ou égale à la date actuelle.");
+                ModelState.AddModelError("Reservation.DateDebut", $"La date de début doit être supérieure ou égale à {DateTime.Now}.");
             }
             if (Reservation.DateFin < Reservation.DateDebut)
             {
-                ModelState.AddModelError("Reservation.DateFin", "La date de fin doit être supérieure ou égale à la date de début.");
+                ModelState.AddModelError("Reservation.DateFin", $"La date de fin doit être supérieure ou égale à {Reservation.DateDebut}.");
             }
 
-            // Verifie que la voiture n'a pas déjà été réservée sur les dates concernées
-            // ET que ce n'est pas la voiture de la reservation actuelle
             if (ListeDeReservations
                     .Where(r => r.ObjetDeLaReservation.Id == Reservation.ObjetDeLaReservation.Id && r.Id != Reservation.Id)
                     .Any(r => r.DateFin >= Reservation.DateDebut && r.DateDebut <= Reservation.DateFin))
@@ -70,25 +67,21 @@ namespace TP4.Pages.ReservationsVoitures
                 ModelState.AddModelError("Reservation.ObjetDeLaReservation", "Cette voiture est déjà réservée pour ces dates.");
             }
 
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            if (!ModelState.IsValid) return Page();
 
             GestionReservable.ModifierReservable(Reservation);
             return RedirectToPage("Index");
         }
 
-        // Recupération et attribution des listes.
         private void ChargementDePage()
         {
             ListeDeVoitures = [];
-            List<Voiture> ListeAVerifier = [.. GestionReservable.ObtenirListeReservable("Voiture").Cast<Voiture>()];
+            List<Voiture> ListeToutesVoitures = [.. GestionReservable.ObtenirListeReservable("Voiture").Cast<Voiture>()];
 
             int anneeMax = DateTime.Now.Year;
             int anneeMin = anneeMax - 10;
 
-            foreach (var voiture in ListeAVerifier)
+            foreach (var voiture in ListeToutesVoitures)
             {
                 if (voiture.AnneeFabrication > anneeMin)
                 {

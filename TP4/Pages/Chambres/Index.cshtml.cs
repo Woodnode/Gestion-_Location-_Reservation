@@ -9,17 +9,19 @@ namespace TP4.Pages.Chambres
     {
         public required List<Chambre> Chambres { get; set; }
 
-        public void OnGet()
+        public ActionResult OnGet()
         {
-            GestionReservable.ChargerListeDepuisFichier("Chambre");
+            GestionReservable.ChargerListeDepuisFichier();
+
             var chambres = GestionReservable.ObtenirListeReservable("Chambre").Cast<Chambre>().ToList();
-            
             Chambres = chambres.Count != 0 ? chambres : [];
+
+            return Page();
         }
 
-        public string ReduireDescription(Chambre chambre)
-        {
-            return chambre.Description.Length > 50 ? string.Concat(chambre.Description.AsSpan(0, 50), "...") : chambre.Description;
-        }
+        public string ReduireDescription(Chambre chambre) => chambre.Description.Length > 50 ? 
+            string.Concat(chambre.Description.AsSpan(0, 50), "...") : chambre.Description;
+
+        public bool VerifierReservation(Chambre chambre) => GestionReservable.EstReserve(chambre.Id);
     }
 }

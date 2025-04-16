@@ -12,28 +12,21 @@ namespace TP4.Pages.ReservationsVoitures
 
         public required Voiture Voiture { get; set; }
 
-        public void OnGet(int id)
+        public ActionResult OnGet(int id)
         {
-            ChargementDePage(id);
+            if (id == null) return NotFound();
 
+            Reservation = (Reservation)GestionReservable.ObtenirReservableParId("Reservation", id);
+
+            Voiture = (Voiture)GestionReservable.ObtenirReservableParId("Voiture", Reservation.ObjetDeLaReservation.Id);
+
+            return Page();
         }
 
         public IActionResult OnPost()
         {
             GestionReservable.SupprimerReservable(Reservation);
             return RedirectToPage("Index");
-        }
-
-        private void ChargementDePage(int id)
-        {
-            Reservation = GestionReservable.ObtenirReservableParId("Reservation", id) as Reservation;
-
-            if (Reservation == null)
-            {
-                RedirectToPage("Index");
-            }
-
-            Voiture = GestionReservable.ObtenirReservableParId("Voiture", Reservation.ObjetDeLaReservation.Id) as Voiture;
         }
     }
 }

@@ -30,10 +30,7 @@ namespace TP4.Pages.ReservationsVoitures
             ChargementDePage();
             Voiture voiture = ListeDeVoitures.First(v => v.Id == IdVoiture);
 
-            if (voiture == null)
-            {
-                ModelState.AddModelError("IdVoiture", "Veuillez sélectionner une voiture.");
-            }
+            if (voiture == null) ModelState.AddModelError("IdVoiture", "Veuillez sélectionner une voiture.");
             else
             {
                 Reservation.ObjetDeLaReservation = voiture;
@@ -43,11 +40,11 @@ namespace TP4.Pages.ReservationsVoitures
 
             if (Reservation.DateDebut < DateTime.Now.Date)
             {
-                ModelState.AddModelError("Reservation.DateDebut", "La date de début doit être supérieure ou égale à la date actuelle.");
+                ModelState.AddModelError("Reservation.DateDebut", $"La date de début doit être supérieure ou égale à {DateTime.Now}.");
             }
             if (Reservation.DateFin < Reservation.DateDebut)
             {
-                ModelState.AddModelError("Reservation.DateFin", "La date de fin doit être supérieure ou égale à la date de début.");
+                ModelState.AddModelError("Reservation.DateFin", $"La date de fin doit être supérieure ou égale à {Reservation.DateDebut}.");
             }
 
             if (ListeDeReservations.Where(r => r.ObjetDeLaReservation.Id == Reservation.ObjetDeLaReservation.Id)
@@ -56,11 +53,10 @@ namespace TP4.Pages.ReservationsVoitures
                 ModelState.AddModelError("Reservation.ObjetDeLaReservation", "Cette voiture est déjà réservée pour ces dates.");
             }
 
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            if (!ModelState.IsValid) return Page();
+
             GestionReservable.AjouterReservable(Reservation);
+
             return RedirectToPage("Index");
         }
 
@@ -69,15 +65,12 @@ namespace TP4.Pages.ReservationsVoitures
             ReservationId = GestionReservable.GenererId("Reservation");
             ListeDeReservations = [.. GestionReservable.ObtenirListeReservable("Reservation").Cast<Reservation>()];
             ListeDeVoitures = [];
-            List<Voiture> ListeAVerifier = [.. GestionReservable.ObtenirListeReservable("Voiture").Cast<Voiture>()];
+            List<Voiture> ListeToutesVoitures = [.. GestionReservable.ObtenirListeReservable("Voiture").Cast<Voiture>()];
             int anneeMax = DateTime.Now.Year;
             int anneeMin = anneeMax - 10;
-            foreach (var voiture in ListeAVerifier)
+            foreach (var voiture in ListeToutesVoitures)
             {
-                if (voiture.AnneeFabrication > anneeMin)
-                {
-                    ListeDeVoitures.Add(voiture);
-                }
+                if (voiture.AnneeFabrication > anneeMin)  ListeDeVoitures.Add(voiture);
             }
         }
     }
