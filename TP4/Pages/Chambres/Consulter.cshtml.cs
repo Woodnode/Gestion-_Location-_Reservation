@@ -20,5 +20,7 @@ namespace TP4.Pages.Chambres
 
             return Page();
         }
+
+        public bool VerifierReservation(Chambre chambre) => GestionReservable.EstReserve(chambre.Id, chambre.GetType().Name);
     }
 }

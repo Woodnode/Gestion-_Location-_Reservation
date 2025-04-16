@@ -18,6 +18,8 @@ namespace TP4.Pages.Voitures
 
             return Page();
         }
+        public bool VerifierReservation(Voiture voiture) => GestionReservable.EstReserve(voiture.Id, voiture.GetType().Name);
+
     }
 }
 

@@ -25,7 +25,14 @@
 
     <div class="mt-3">
         <a asp-page="./Modifier" asp-route-id="@Model.Chambre.Id" class="btn btn-primary">Modifier</a>
-        <a asp-page="./Supprimer" asp-route-id="@Model.Chambre.Id" class="btn btn-danger">Supprimer</a>
+            @if (Model.VerifierReservation(Model.Chambre))
+            {
+                <a class="btn btn-secondary" disabled>Supprimer</a>
+            }
+            else
+            {
+                <a asp-page="Supprimer" asp-route-id="@Model.Chambre.Id" class="btn btn-danger">Supprimer</a>
+            }
         <a asp-page="./Index" class="btn btn-outline-dark">Retourner à la liste</a>
     </div>
 </div>
