@@ -22,6 +22,6 @@ namespace TP4.Pages.Voitures
         public string ReduireDescription(Voiture voiture) => voiture.Description.Length > 50 ? 
             string.Concat(voiture.Description.AsSpan(0, 50), "...") : voiture.Description;
 
-        public bool VerifierReservation(Voiture voiture) => GestionReservable.EstReserve(voiture.Id);
+        public bool VerifierReservation(Voiture voiture) => GestionReservable.EstReserve(voiture.Id, voiture.GetType().Name);
     }
 }

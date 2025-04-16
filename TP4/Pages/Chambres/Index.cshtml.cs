@@ -22,6 +22,6 @@ namespace TP4.Pages.Chambres
         public string ReduireDescription(Chambre chambre) => chambre.Description.Length > 50 ? 
             string.Concat(chambre.Description.AsSpan(0, 50), "...") : chambre.Description;
 
-        public bool VerifierReservation(Chambre chambre) => GestionReservable.EstReserve(chambre.Id);
+        public bool VerifierReservation(Chambre chambre) => GestionReservable.EstReserve(chambre.Id, chambre.GetType().Name);
     }
 }

@@ -39,7 +39,6 @@ namespace TP4.Services
                 }
                 return id;
             }
-
         }
 
         protected static void SauvegarderListeReservable(string type)
@@ -176,9 +175,9 @@ namespace TP4.Services
             return ListeReservations;
         }
 
-        public static bool EstReserve(int id)
+        public static bool EstReserve(int id, string type)
         {
-            if (ObtenirListeReservable("Reservation").Cast<Reservation>().ToList()
+            if (ObtenirListeReservable("Reservation").Cast<Reservation>().ToList().Where(r => r.ObjetDeLaReservation.GetType().Name == type)
               .Any(r => r.ObjetDeLaReservation.Id == id)) return true;
 
             return false;

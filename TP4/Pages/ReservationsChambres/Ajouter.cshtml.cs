@@ -4,7 +4,7 @@ using TP4.Services;
 using TP4.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace TP4.Pages.ReservationsVoitures
+namespace TP4.Pages.ReservationsChambres
 {
     public class AjouterModel : PageModel
     {
@@ -15,10 +15,10 @@ namespace TP4.Pages.ReservationsVoitures
 
         public required List<Reservation> ListeDeReservations { get; set; }
 
-        public required List<Voiture> ListeDeVoitures { get; set; }
+        public required List<Chambre> ListeDeChambres { get; set; }
 
         [BindProperty]
-        public int IdVoiture { get; set; }
+        public int IdChambre { get; set; }
 
         public ActionResult OnGet()
         {
@@ -29,30 +29,30 @@ namespace TP4.Pages.ReservationsVoitures
         public IActionResult OnPost()
         {
             ChargementDePage();
-            Voiture voiture = ListeDeVoitures.First(v => v.Id == IdVoiture);
+            Chambre chambre = ListeDeChambres.First(v => v.Id == IdChambre);
 
-            if (voiture == null) ModelState.AddModelError("IdVoiture", "Veuillez sélectionner une voiture.");
+            if (chambre == null) ModelState.AddModelError("IdChambre", "Veuillez sélectionner une voiture.");
             else
             {
-                Reservation.ObjetDeLaReservation = voiture;
-                Reservation.PrixJournalier = voiture.PrixJournalier;
+                Reservation.ObjetDeLaReservation = chambre;
+                Reservation.PrixJournalier = chambre.PrixJournalier;
                 Reservation.Prix = Reservation.PrixJournalier * ((Reservation.DateFin - Reservation.DateDebut).Days + 1);
             }
 
             if (Reservation.DateDebut < DateTime.Now.Date)
             {
-                ModelState.AddModelError("Reservation.DateDebut", $"La date de début doit être supérieure ou égale à {DateTime.Now.Date:yyyy-MM-dd}.");
+                ModelState.AddModelError("Reservation.DateDebut", $"La date de début doit être supérieure ou égale à {DateTime.Now.Date:yyyy-MM -dd}.");
             }
             if (Reservation.DateFin < Reservation.DateDebut)
             {
-                ModelState.AddModelError("Reservation.DateFin", $"La date de fin doit être supérieure ou égale à {Reservation.DateDebut.Date:yyyy-MM-dd}.");
+                ModelState.AddModelError("Reservation.DateFin", $"La date de fin doit être supérieure ou égale à {Reservation.DateDebut.Date:yyyy-MM -dd}.");
             }
 
             if (ListeDeReservations.Where(r => r.ObjetDeLaReservation.Id == Reservation.ObjetDeLaReservation.Id 
             && r.ObjetDeLaReservation.GetType() == Reservation.ObjetDeLaReservation.GetType())
                 .Any(r => r.DateFin >= Reservation.DateDebut && r.DateDebut <= Reservation.DateFin))
             {
-                ModelState.AddModelError("Reservation.ObjetDeLaReservation", "Cette voiture est déjà réservée pour ces dates.");
+                ModelState.AddModelError("Reservation.ObjetDeLaReservation", "Cette chambre est déjà réservée pour ces dates.");
             }
 
             if (!ModelState.IsValid) return Page();
@@ -66,14 +66,7 @@ namespace TP4.Pages.ReservationsVoitures
         {
             ReservationId = GestionReservable.GenererId("Reservation");
             ListeDeReservations = [.. GestionReservable.ObtenirListeReservable("Reservation").Cast<Reservation>()];
-            ListeDeVoitures = [];
-            List<Voiture> ListeToutesVoitures = [.. GestionReservable.ObtenirListeReservable("Voiture").Cast<Voiture>()];
-            int anneeMax = DateTime.Now.Year;
-            int anneeMin = anneeMax - 10;
-            foreach (var voiture in ListeToutesVoitures)
-            {
-                if (voiture.AnneeFabrication > anneeMin)  ListeDeVoitures.Add(voiture);
-            }
+            ListeDeChambres = [.. GestionReservable.ObtenirListeReservable("Chambre").Cast<Chambre>()];
         }
     }
 }
