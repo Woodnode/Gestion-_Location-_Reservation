@@ -26,7 +26,7 @@ namespace TP4.Pages.ReservationsChambres
             return Page();
         }
 
-        public IActionResult OnPost()
+        public ActionResult OnPost()
         {
             ChargementDePage();
             Chambre chambre = ListeDeChambres.First(v => v.Id == IdChambre);

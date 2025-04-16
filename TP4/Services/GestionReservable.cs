@@ -166,13 +166,15 @@ namespace TP4.Services
             SauvegarderListeReservable(reservable.GetType().Name);
         }
 
-        public static List<Reservation> TrierListeReservation(string tri)
+        public static List<Reservation> TrierListeReservation(string tri, string type)
         {
-            if (tri == "DateDebut") ListeReservations.Sort((x, y) => y.DateDebut.CompareTo(x.DateDebut));
-            else if (tri == "DateFin") ListeReservations.Sort((x, y) => y.DateFin.CompareTo(x.DateFin));
-            else if (tri == "Prix") ListeReservations.Sort((x, y) => y.Prix.CompareTo(x.Prix));
+            List<Reservation> listeReservationTriee = [.. ListeReservations.Where(r => r.ObjetDeLaReservation.GetType().Name == type)];
 
-            return ListeReservations;
+            if (tri == "DateDebut") listeReservationTriee.Sort((x, y) => y.DateDebut.CompareTo(x.DateDebut));
+            else if (tri == "DateFin") listeReservationTriee.Sort((x, y) => y.DateFin.CompareTo(x.DateFin));
+            else if (tri == "Prix") listeReservationTriee.Sort((x, y) => y.Prix.CompareTo(x.Prix));
+
+            return listeReservationTriee;
         }
 
         public static bool EstReserve(int id, string type)

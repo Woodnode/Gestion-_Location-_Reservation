@@ -34,7 +34,7 @@ namespace TP4.Pages.ReservationsVoitures
             return Page();
         }
 
-        public IActionResult OnPost()
+        public ActionResult OnPost()
         {
             ChargementDePage();
             ListeDeReservations = [.. GestionReservable.ObtenirListeReservable("Reservation").Cast<Reservation>()];

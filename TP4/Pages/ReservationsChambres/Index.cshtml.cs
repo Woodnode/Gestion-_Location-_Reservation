@@ -14,7 +14,7 @@ namespace TP4.Pages.ReservationsChambres
         {
             if (tri != null)
             {
-                Reservations = GestionReservable.TrierListeReservation(tri);
+                Reservations = GestionReservable.TrierListeReservation(tri, "Chambre");
                 return Page();
             }
 

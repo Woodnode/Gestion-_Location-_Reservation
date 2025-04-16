@@ -23,7 +23,7 @@ namespace TP4.Pages.ReservationsChambres
             return Page();
         }
 
-        public IActionResult OnPost()
+        public ActionResult OnPost()
         {
             GestionReservable.SupprimerReservable(Reservation);
             return RedirectToPage("Index");

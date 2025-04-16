@@ -33,7 +33,7 @@ namespace TP4.Pages.ReservationsChambres
             return Page();
         }
 
-        public IActionResult OnPost()
+        public ActionResult OnPost()
         {
             ListeDeChambres = [.. GestionReservable.ObtenirListeReservable("Chambre").Cast<Chambre>()];
             ListeDeReservations = [.. GestionReservable.ObtenirListeReservable("Reservation").Cast<Reservation>()];

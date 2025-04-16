@@ -14,7 +14,7 @@ namespace TP4.Pages.ReservationsVoitures
         {
             if (tri != null)
             {
-                Reservations = GestionReservable.TrierListeReservation(tri);
+                Reservations = GestionReservable.TrierListeReservation(tri, "Voiture");
                 return Page();
             }
 
