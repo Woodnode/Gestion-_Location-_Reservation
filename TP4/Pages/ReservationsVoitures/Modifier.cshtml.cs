@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TP4.Services;
 using TP4.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace TP4.Pages.ReservationsVoitures
 {
@@ -15,6 +16,7 @@ namespace TP4.Pages.ReservationsVoitures
         public required List<Reservation> ListeDeReservations { get; set; }
 
         [BindProperty]
+        [Required(ErrorMessage = "Veuillez sélectionner une voiture.")]
         public int IdVoiture { get; set; }
 
         public ActionResult OnGet(int? id)
@@ -40,10 +42,7 @@ namespace TP4.Pages.ReservationsVoitures
             ListeDeReservations = [.. GestionReservable.ObtenirListeReservable("Reservation").Cast<Reservation>()];
 
             Voiture voiture = ListeDeVoitures.First(v => v.Id == IdVoiture);
-            if (voiture == null)
-            {
-                ModelState.AddModelError("IdVoiture", "Veuillez sélectionner une voiture.");
-            }
+            if (voiture == null) ModelState.AddModelError("IdVoiture", "Veuillez sélectionner une voiture.");
             else
             {
                 Reservation.ObjetDeLaReservation = voiture;

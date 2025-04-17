@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using TP4.Services;
 using TP4.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace TP4.Pages.ReservationsChambres
 {
@@ -14,6 +15,7 @@ namespace TP4.Pages.ReservationsChambres
 
         public required List<Reservation> ListeDeReservations { get; set; }
 
+        [Required(ErrorMessage = "Veuillez sélectionner une chambre.")]
         [BindProperty]
         public int IdChambre { get; set; }
 
@@ -39,10 +41,7 @@ namespace TP4.Pages.ReservationsChambres
             ListeDeReservations = [.. GestionReservable.ObtenirListeReservable("Reservation").Cast<Reservation>()];
 
             Chambre chambre = ListeDeChambres.First(v => v.Id == IdChambre);
-            if (chambre == null)
-            {
-                ModelState.AddModelError("IdChambre", "Veuillez sélectionner une chambre.");
-            }
+            if (chambre == null) ModelState.AddModelError("IdChambre", "Veuillez sélectionner une chambre.");
             else
             {
                 Reservation.ObjetDeLaReservation = chambre;

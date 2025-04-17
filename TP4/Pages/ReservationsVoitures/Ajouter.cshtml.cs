@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using TP4.Services;
 using TP4.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.ComponentModel.DataAnnotations;
 
 namespace TP4.Pages.ReservationsVoitures
 {
@@ -18,6 +19,7 @@ namespace TP4.Pages.ReservationsVoitures
         public required List<Voiture> ListeDeVoitures { get; set; }
 
         [BindProperty]
+        [Required(ErrorMessage = "Veuillez sélectionner une voiture.")]
         public int IdVoiture { get; set; }
 
         public ActionResult OnGet()

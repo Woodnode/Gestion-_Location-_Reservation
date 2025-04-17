@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using TP4.Services;
 using TP4.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.ComponentModel.DataAnnotations;
 
 namespace TP4.Pages.ReservationsChambres
 {
@@ -17,8 +18,9 @@ namespace TP4.Pages.ReservationsChambres
 
         public required List<Chambre> ListeDeChambres { get; set; }
 
+        [Required(ErrorMessage = "Veuillez sélectionner une chambre.")]
         [BindProperty]
-        public int IdChambre { get; set; }
+        public required int IdChambre { get; set; }
 
         public ActionResult OnGet()
         {
@@ -29,9 +31,10 @@ namespace TP4.Pages.ReservationsChambres
         public ActionResult OnPost()
         {
             ChargementDePage();
+
             Chambre chambre = ListeDeChambres.First(v => v.Id == IdChambre);
 
-            if (chambre == null) ModelState.AddModelError("IdChambre", "Veuillez sélectionner une voiture.");
+            if (chambre == null) ModelState.AddModelError("IdChambre", "Veuillez sélectionner une chambre.");
             else
             {
                 Reservation.ObjetDeLaReservation = chambre;

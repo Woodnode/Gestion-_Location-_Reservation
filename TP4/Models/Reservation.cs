@@ -19,7 +19,6 @@ namespace TP4.Models
         public DateTime DateFin { get; set; }
 
         [Display(Name = "Objet de la réservation")]
-        [BindNever]
         public IReservable? ObjetDeLaReservation { get; set; }
 
         [Required(ErrorMessage = "Le Prix Journalier est obligatoire.")]
