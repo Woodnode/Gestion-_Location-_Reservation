@@ -32,6 +32,7 @@ namespace TP4.Pages.Voitures
             }
             if (!ModelState.IsValid) return Page();
 
+            Voiture.Description = Voiture.Description.Trim().Replace(";", "");
             Voiture.Id = GestionReservable.GenererId("Voiture");
             GestionReservable.AjouterReservable(Voiture);
 

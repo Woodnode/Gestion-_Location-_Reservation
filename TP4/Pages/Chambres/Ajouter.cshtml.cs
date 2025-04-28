@@ -13,7 +13,7 @@ namespace TP4.Pages.Chambres
         public ActionResult OnPost()
         {
             if (!ModelState.IsValid) return Page();
-
+            Chambre.Description = Chambre.Description.Trim().Replace(";", "");
             Chambre.Id = GestionReservable.GenererId("Chambre");
             GestionReservable.AjouterReservable(Chambre);
 

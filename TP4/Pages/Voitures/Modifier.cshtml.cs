@@ -37,6 +37,7 @@ namespace TP4.Pages.Voitures
 
             if (!ModelState.IsValid) return Page();
 
+            Voiture.Description = Voiture.Description.Trim().Replace(";", "");
             GestionReservable.ModifierReservable(Voiture);
 
             return RedirectToPage("Index");

@@ -25,6 +25,7 @@ namespace TP4.Pages.Chambres
         {
             if (!ModelState.IsValid) return Page();
 
+            Chambre.Description = Chambre.Description.Trim().Replace(";", "");
             GestionReservable.ModifierReservable(Chambre);
             
             return RedirectToPage("Index");
