@@ -21,10 +21,14 @@ namespace TP4.Pages.Voitures
 
         public ActionResult OnPost()
         {
+            if (VerifierReservation(Voiture)) ModelState.AddModelError("Voiture", "La voiture est réservée et ne peut pas être supprímée.");
+            if (!ModelState.IsValid) return Page();
             GestionReservable.SupprimerReservable(Voiture);
 
             return RedirectToPage("Index");
         }
+
+        public bool VerifierReservation(Voiture voiture) => GestionReservable.EstReserve(voiture.Id, voiture.GetType().Name);
     }
 }
 

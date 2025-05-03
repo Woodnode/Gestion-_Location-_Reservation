@@ -7,6 +7,13 @@
     <div class="container mt-5">
         <h1 class="mb-4">@ViewData["Titre"]</h1>
 
+            @if (Model.Reservation.DateDebut <= DateTime.Now)
+    {
+        <h1>Impossible de modifier une réservation en cours ou passée.</h1>
+        <a asp-page="./Index" class="btn btn-outline-dark">Retourner à la liste</a>
+    }
+    else
+    {
         <div class="card">
             <div class="card-body">
                 <dl class="row mb-3">
@@ -48,4 +55,5 @@
             <a asp-page="./Index" class="btn btn-outline-dark">Retourner à la liste</a>
         </form>
     </div>
+    }
 </div>

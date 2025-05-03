@@ -20,11 +20,22 @@ namespace TP4.Pages.Chambres
             return Page();
         }
 
-        public ActionResult OnPost()
+        public ActionResult OnPost(int id)
         {
+
+            if (GestionReservable.ObtenirReservableParId("Chambre", id) is not Chambre chambre) return NotFound();
+            Chambre = chambre;
+
+            if (VerifierReservation(Chambre)) ModelState.AddModelError("Chambre", "La chambre est réservée et ne peut pas être supprimée.");
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
             GestionReservable.SupprimerReservable(Chambre);
 
             return RedirectToPage("Index");
         }
+        public bool VerifierReservation(Chambre chambre) => GestionReservable.EstReserve(chambre.Id, chambre.GetType().Name);
+
     }
 }
